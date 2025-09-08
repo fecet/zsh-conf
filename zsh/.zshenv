@@ -50,46 +50,4 @@ elif [ "$CHROME_DESKTOP" = "cursor.desktop" ]; then
 fi
 export EDITOR=$VISUAL
 export MANPAGER='nvim +Man!'
-# if [[ "$(command -v nvimpager)" ]]; then
-#     export PAGER="nvimpager"
-#     export NVIMPAGER_NVIM="$MAMBA_ROOT_PREFIX/bin/nvim"
-# fi
-#export http_proxy="127.0.0.1:7890"
-#export https_proxy="127.0.0.1:7890"
-
-###
-###FZF
-###
-
-#[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# export FZF_DEFAULT_COMMAND='fd --hidden --follow -E ".git" -E "/run/timeshift" -E "/mnt" -E "/proc" -E "/var/run/" '
-#export FZF_DEFAULT_OPTS='--height 90% --layout=reverse --bind=alt-j:down,alt-k:up,alt-i:toggle+down --border --preview "echo {} | ~/scripts/fzf_preview.py" --preview-window=right --color=fg:#f8f8f2,bg:#282a36,hl:#bd93f9 --color=fg+:#f8f8f2,bg+:#44475a,hl+:#bd93f9 --color=info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6 --color=marker:#ff79c6,spinner:#ffb86c,header:#6272a4'
-# export FZF_DEFAULT_OPTS='--height 90% --layout=reverse --preview "echo {} | ~/scripts/fzf_preview.py" --preview-window=right,border-none'
-
 export FZF_DEFAULT_OPTS="--height 90% --layout=reverse --preview='~/scripts/fzf_preview.sh {}' --preview-window=right,border-none"
-# use fzf in bash and zsh
-# Use ~~ as the trigger sequence instead of the default **
-#export FZF_COMPLETION_TRIGGER='~~'
-
-#export FZF_DEFAULT_OPTS=''
-# Options to fzf command
-#export FZF_COMPLETION_OPTS='--height 90% --layout=reverse --preview "echo {} | ~/scripts/fzf_preview.py" --preview-window=right'
-
-# Use fd (https://github.com/sharkdp/fd) instead of the default find
-# command for listing path candidates.
-# - The first argument to the function ($1) is the base path to start traversal
-# - See the source code (completion.{bash,zsh}) for the details.
-_fzf_compgen_path() {
-  fdfind --hidden --follow -E ".git" -E "node_modules" . /etc /home
-}
-
-# Use fd to generate the list for directory completion
-_fzf_compgen_dir() {
-  fdfind --type d --hidden --follow -E ".git" -E "node_modules" . /etc /home
-}
-
-
-
-skip_global_compinit=1
-
