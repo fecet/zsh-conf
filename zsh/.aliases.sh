@@ -308,6 +308,7 @@ install_compl() {
   buf     "buf completion zsh"
   pnpm    "pnpm completion zsh"
   dagger "dagger completion zsh"
+  codex "codex completion zsh"
 )
 
 for name in "${(@k)comps}"; do
