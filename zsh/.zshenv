@@ -9,7 +9,7 @@ export PATH=$HOME/.TinyTeX/bin/x86_64-linux/:$PATH
 export PATH=$HOME/.local/share/bob/nvim-bin:$PATH
 export PATH=$PATH:"$HOME/.local/share/nvim/mason/bin"
 # pnpm
-export PNPM_HOME="/home/rok/.local/share/pnpm"
+export PNPM_HOME="$HOME/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
@@ -50,4 +50,4 @@ elif [ "$CHROME_DESKTOP" = "cursor.desktop" ]; then
 fi
 export EDITOR=$VISUAL
 export MANPAGER='nvim +Man!'
-export FZF_DEFAULT_OPTS="--height 90% --layout=reverse --preview='~/scripts/fzf_preview.sh {}' --preview-window=right,border-none"
+export FZF_DEFAULT_OPTS="--height 90% --layout=reverse --preview-window=right,border-none"

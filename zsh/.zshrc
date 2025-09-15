@@ -130,7 +130,8 @@ zinit wait="0" lucid light-mode for \
     blockf \
     zsh-users/zsh-completions \
     zdharma-continuum/zinit-annex-bin-gem-node \
-    Aloxaf/fzf-tab
+    Aloxaf/fzf-tab \
+    Freed-Wu/fzf-tab-source
 
 zinit wait="1" lucid for \
   atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
