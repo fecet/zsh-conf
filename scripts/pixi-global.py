@@ -6,7 +6,7 @@ import tyro
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Dict, List, Optional, Set
+from typing import Dict, List
 
 
 # Define the msgspec structures for TOML serialization
@@ -80,14 +80,7 @@ class EnvConfig:
 class Environment(Enum):
     """Available environment configurations."""
 
-    SHELL = "shell"
-    DEVOPS = "devops"
-    ALL = "all"  # Generate all environments
-
-
-def get_shell_config() -> EnvConfig:
-    """Get shell environment configuration."""
-    return EnvConfig(
+    shell = EnvConfig(
         name="shell",
         packages=[
             "ast-grep",
@@ -180,11 +173,7 @@ def get_shell_config() -> EnvConfig:
             "python",  # doesn't need to be exposed
         ],
     )
-
-
-def get_devops_config() -> EnvConfig:
-    """Get DevOps environment configuration."""
-    return EnvConfig(
+    devops = EnvConfig(
         name="devops",
         packages=[
             "cookiecutter",
@@ -203,28 +192,7 @@ def get_devops_config() -> EnvConfig:
             "podman-rootful",  # exposed as "podman"
         ],
     )
-
-
-def get_environment_config(env: Environment) -> List[EnvConfig]:
-    """Get environment configuration(s) based on selection.
-
-    Args:
-        env: Environment to generate configuration for
-
-    Returns:
-        List of EnvConfig objects for the selected environment(s)
-    """
-    configs = {
-        Environment.SHELL: get_shell_config(),
-        Environment.DEVOPS: get_devops_config(),
-    }
-
-    if env == Environment.ALL:
-        return list(configs.values())
-    elif env in configs:
-        return [configs[env]]
-    else:
-        raise ValueError(f"Unknown environment: {env}")
+    all = "all"  # Generate all environments
 
 
 # Example of additional environment (uncomment and modify as needed)
@@ -249,37 +217,41 @@ def get_environment_config(env: Environment) -> List[EnvConfig]:
 
 
 def generate_pixi_global(
-    environments: Environment = Environment.ALL,
-    manifest_path: Optional[Path] = None,
-    dry_run: bool = False,
-) -> bytes:
+    environment: Environment,
+    manifest_path: Path = Path.home() / ".pixi" / "manifests" / "pixi-global.toml",
+) -> None:
     """Generate pixi-global.toml file.
 
     Args:
-        environments: Which environment(s) to generate
-        manifest_path: Manifest file path (defaults to ~/.pixi/manifests/pixi-global.toml)
-        dry_run: If True, don't write file, just print content
-
-    Returns:
-        Generated TOML content as bytes
+        environment: Which environment to generate
+        manifest_path: Manifest file path
     """
-    # Determine manifest path
-    if manifest_path is None:
-        manifest_path = Path.home() / ".pixi" / "manifests" / "pixi-global.toml"
 
     # Read existing manifest if it exists
     existing_envs = {}
     if manifest_path.exists():
         try:
             existing_content = manifest_path.read_bytes()
-            existing_config = msgspec.toml.decode(existing_content, type=PixiGlobalConfig)
+            existing_config = msgspec.toml.decode(
+                existing_content, type=PixiGlobalConfig
+            )
             existing_envs = existing_config.envs
             print(f"Merging with existing manifest: {manifest_path}")
         except Exception as e:
             print(f"Warning: Could not read existing manifest: {e}")
 
     # Get selected environment configurations
-    env_configs = get_environment_config(environments)
+    if environment == Environment.all:
+        # Get all non-ALL environments
+        env_configs = [
+            e.value
+            for e in Environment
+            if e != Environment.all and isinstance(e.value, EnvConfig)
+        ]
+    elif isinstance(environment.value, EnvConfig):
+        env_configs = [environment.value]
+    else:
+        raise ValueError(f"Invalid environment: {environment}")
 
     # Build envs dict from selected environment configurations
     # Merge with existing environments (new environments overwrite existing ones)
@@ -293,63 +265,33 @@ def generate_pixi_global(
     # Convert to TOML using msgspec
     toml_content = msgspec.toml.encode(config)
 
-    if not dry_run:
-        # Ensure parent directory exists
-        manifest_path.parent.mkdir(parents=True, exist_ok=True)
-        # Write to file
-        manifest_path.write_bytes(toml_content)
-        print(f"Generated {manifest_path}")
-    else:
-        print("Dry run mode - file not written")
-
-    print(f"Updated/Added environments: {', '.join(env_config.name for env_config in env_configs)}")
+    # Ensure parent directory exists
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    # Write to file
+    manifest_path.write_bytes(toml_content)
+    print(f"Generated {manifest_path}")
+    print(
+        f"Updated/Added environments: {', '.join(env_config.name for env_config in env_configs)}"
+    )
     if existing_envs:
         print(f"Total environments in manifest: {len(envs)}")
 
-    return toml_content
-
-
-def list_environments() -> None:
-    """List all available environments and their packages."""
-    for env in Environment:
-        if env == Environment.ALL:
-            continue
-        print(f"\n{env.value}:")
-        config = get_environment_config(env)[0]
-        print(f"  Packages: {', '.join(sorted(config.packages))}")
-        if config.custom_versions:
-            print(f"  Custom versions: {config.custom_versions}")
-
 
 def main(
-    environments: Environment = Environment.ALL,
-    manifest: Optional[Path] = None,
-    dry_run: bool = False,
-    list_envs: bool = False,
-    show: bool = False,
+    environment: Environment,
+    /,  # Mark environment as positional
+    manifest: Path = Path.home() / ".pixi" / "manifests" / "pixi-global.toml",
 ) -> None:
     """Generate pixi-global.toml configuration file.
 
     Args:
-        environments: Which environment(s) to generate (default: all)
-        manifest: Manifest file path (defaults to ~/.pixi/manifests/pixi-global.toml)
-        dry_run: Don't write file, just show what would be generated
-        list_envs: List available environments and exit
-        show: Show generated content
+        environment: Which environment to generate (shell, devops, or all)
+        manifest: Manifest file path
     """
-    if list_envs:
-        list_environments()
-        return
-
-    content = generate_pixi_global(
-        environments=environments,
+    generate_pixi_global(
+        environment=environment,
         manifest_path=manifest,
-        dry_run=dry_run,
     )
-
-    if show or dry_run:
-        print("\nGenerated content:")
-        print(content.decode())
 
 
 if __name__ == "__main__":
