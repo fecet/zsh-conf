@@ -88,7 +88,6 @@ class Environment(Enum):
             "bat",
             "bob",
             "btop",
-            "cue",
             "direnv",
             "duf",
             "eza",
@@ -100,8 +99,6 @@ class Environment(Enum):
             "go-yq",
             "jq",
             "just",
-            "kubectl-krew",
-            "kubernetes",
             "lazygit",
             "micromamba",
             "minio-client",
@@ -117,6 +114,7 @@ class Environment(Enum):
             "uv",
             "yazi",
             "zoxide",
+            "pistol",
         ],
         custom_versions={
             "nodejs": "<24",
@@ -141,8 +139,6 @@ class Environment(Enum):
             "jsonnet-deps",
             "jsonnet-lint",
             "jsonnetfmt",
-            # kubernetes
-            "kubectl",
             # minio-client
             "mc",
             # mutagen-io
@@ -163,8 +159,6 @@ class Environment(Enum):
             "git-delta",  # exposed as "delta"
             "go-jsonnet",  # exposes multiple commands
             "go-yq",  # exposed as "yq"
-            "kubectl-krew",  # doesn't expose a direct command
-            "kubernetes",  # exposed as "kubectl"
             "minio-client",  # exposed as "mc"
             "mutagen-io",  # exposed as "mutagen"
             "nodejs",  # exposes multiple commands
@@ -178,42 +172,28 @@ class Environment(Enum):
         packages=[
             "cookiecutter",
             "k9s",
+            "kubectl-krew",
+            "kubernetes",
             "podman-docker",
             "podman-rootful",
             "pre-commit",
+            "quarto"
         ],
         additional_commands=[
+            # kubernetes
+            "kubectl",
             # podman
             "docker",
             "podman",
         ],
         skip_auto_expose=[
+            "kubectl-krew",  # doesn't expose a direct command
+            "kubernetes",  # exposed as "kubectl"
             "podman-docker",  # exposed as "docker"
             "podman-rootful",  # exposed as "podman"
         ],
     )
     all = "all"  # Generate all environments
-
-
-# Example of additional environment (uncomment and modify as needed)
-# def get_dev_config() -> EnvConfig:
-#     """Get development environment configuration."""
-#     return EnvConfig(
-#         name="dev",
-#     packages=[
-#         "rust",
-#         "cargo-edit",
-#         "cargo-watch",
-#     ],
-#     custom_versions={
-#         "rust": "1.75.*",
-#     },
-#     additional_commands=[
-#         "cargo",
-#         "rustc",
-#         "rustup",
-#     ],
-#     )
 
 
 def generate_pixi_global(
