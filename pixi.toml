@@ -9,3 +9,7 @@ version = "0.1.0"
 
 [dependencies]
 cue = "*"
+msgspec = "*"
+msgspec-yaml = "*"
+msgspec-toml = "*"
+tyro = "*"
