@@ -1,0 +1,17 @@
+version: 6
+environments:
+  default:
+    channels:
+    - url: https://repo.prefix.dev/meta-forge/
+    - url: https://conda.anaconda.org/conda-forge/
+    packages:
+      linux-64:
+      - conda: https://conda.anaconda.org/conda-forge/linux-64/cue-0.14.1-ha770c72_0.conda
+packages:
+- conda: https://conda.anaconda.org/conda-forge/linux-64/cue-0.14.1-ha770c72_0.conda
+  sha256: c3d93f47ee3c2744d518cdb60cee3568bc7729e512660503383d5a7a91669b53
+  md5: 2938f8562e11dd172ac42aac3f22564f
+  license: Apache-2.0
+  license_family: APACHE
+  size: 7113148
+  timestamp: 1754934381473
