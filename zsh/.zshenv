@@ -50,4 +50,4 @@ elif [ "$CHROME_DESKTOP" = "cursor.desktop" ]; then
 fi
 export EDITOR=$VISUAL
 export MANPAGER='nvim +Man!'
-export FZF_DEFAULT_OPTS="--height 90% --layout=reverse --preview-window=right,border-none"
+export FZF_DEFAULT_OPTS="--height 90% --layout=reverse --preview='pistol {}' --preview-window=right,border-none"
