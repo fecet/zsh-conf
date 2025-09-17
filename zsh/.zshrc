@@ -46,8 +46,12 @@ fi
 ### Added by Zinit's installer
 source ~/.aliases.sh
 [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
-[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME" && source "${ZINIT_HOME}/zinit.zsh"
+[ ! -d $ZINIT_HOME/.git ] && git clone --depth=1 https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME" && source "${ZINIT_HOME}/zinit.zsh"
 source "${ZINIT_HOME}/zinit.zsh"
+
+# Zinit optimization settings
+export ZINIT[OPTIMIZE_OUT_DISK_ACCESSES]=1
+zstyle ':zinit:compinit' arguments -C
 
 # Workaround for zinit issue#504: remove subversion dependency. Function clones all files in plugin
 # directory (on github) that might be useful to zinit snippet directory. Should only be invoked
@@ -145,10 +149,10 @@ zstyle ':completion:*:exa' sort false
 zstyle ':completion:files' sort false
 zstyle ':fzf-tab:complete:*' fzf-preview 'echo $realpath | ~/scripts/fzf_preview.py'
 
-zi ice as"program" from"gh-r" \
+zinit ice depth=1 as"program" from"gh-r" \
   atpull"%atclone" \
   mv'pixi* > pixi' \
-  bpick"pixi-*"; zi load fecet/pixi
+  bpick"pixi-*"; zinit load fecet/pixi
 
 if [[ $- == *i* ]]; then
   for _f in $PIXI_HOME/hooks/zsh/*.sh(N); do
@@ -157,43 +161,47 @@ if [[ $- == *i* ]]; then
   unset _f
 fi
 
-zinit ice as"program" \
+zinit ice depth=1 as"program" \
   atclone'ln -sf completion/_kubectx.zsh _kubectx; ln -sf completion/_kubens.zsh _kubens' \
   atpull'%atclone' \
-  sbin'kubectx;kubens'; zi load ahmetb/kubectx
+  sbin'kubectx;kubens'; zinit load ahmetb/kubectx
 
-zinit wait="0" lucid light-mode for \
+# Core plugins - load immediately after prompt
+zinit wait lucid light-mode for \
     hlissner/zsh-autopair \
     Aloxaf/gencomp \
     OMZL::completion.zsh \
     OMZL::clipboard.zsh \
     has'fzf' OMZP::fzf \
-    blockf \
-    zsh-users/zsh-completions \
+    blockf zsh-users/zsh-completions \
     zdharma-continuum/zinit-annex-bin-gem-node \
-    Aloxaf/fzf-tab \
+    Aloxaf/fzf-tab
+
+# OMZ plugins - load with shared ice modifiers
+zinit wait"1" lucid for \
+  atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+  atclone"_fix-omz-plugin-cached" atpull"%atclone" \
+    OMZP::extract \
+    OMZP::pip \
+    OMZP::kubectl \
+    OMZP::podman \
+    OMZP::kitty \
+    OMZP::sudo \
+    OMZP::dotenv \
+    OMZP::direnv \
+    OMZP::systemd
+
+zinit ice as"completion"
+zinit snippet OMZP::docker/completions/_docker
+
+# Optional enhancements - load last
+zinit wait"2" lucid for \
     Freed-Wu/fzf-tab-source
 
-zinit wait="1" lucid for \
-  atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
-  atclone"_fix-omz-plugin-cached" atpull"%atclone" OMZP::extract \
-  atclone"_fix-omz-plugin-cached" atpull"%atclone" OMZP::pip \
-  atclone"_fix-omz-plugin-cached" atpull"%atclone" OMZP::kubectl \
-  atclone"_fix-omz-plugin-cached" atpull"%atclone" OMZP::podman \
-  atclone"_fix-omz-plugin-cached" atpull"%atclone" OMZP::kitty \
-  atclone"_fix-omz-plugin-cached" atpull"%atclone" OMZP::sudo \
-  atclone"_fix-omz-plugin-cached" atpull"%atclone" OMZP::dotenv \
-  atclone"_fix-omz-plugin-cached" atpull"%atclone" OMZP::direnv \
-  atclone"_fix-omz-plugin-cached" atpull"%atclone" OMZP::systemd
-zi ice as"completion"
-zi snippet OMZP::docker/completions/_docker
-
+# Syntax highlighting and autosuggestions
 zinit wait lucid for \
- atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
     zdharma-continuum/fast-syntax-highlighting \
- blockf \
-    zsh-users/zsh-completions \
- atload"!_zsh_autosuggest_start" \
+  atload"!_zsh_autosuggest_start" \
     zsh-users/zsh-autosuggestions
 
 zinit ice depth=1; zinit light romkatv/powerlevel10k
@@ -205,6 +213,5 @@ fi
 if command -v atuin >/dev/null 2>&1; then
   eval "$(atuin init zsh)"
 fi
+# Add Pixi completions to fpath
 fpath+=($PIXI_HOME/completions/zsh)
-autoload -Uz compinit
-compinit
