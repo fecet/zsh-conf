@@ -102,8 +102,6 @@ zstyle ':completion:files' sort false
 zstyle ':fzf-tab:complete:*' fzf-preview 'echo $realpath | ~/scripts/fzf_preview.py'
 
 zi ice as"program" from"gh-r" \
-  ver"v0.53.0" \
-  atclone"install_compl" \
   atpull"%atclone" \
   mv'pixi* > pixi' \
   bpick"pixi-*"; zi load fecet/pixi
