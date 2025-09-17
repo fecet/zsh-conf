@@ -187,7 +187,6 @@ zinit wait"1" lucid for \
     OMZP::podman \
     OMZP::kitty \
     OMZP::sudo \
-    OMZP::dotenv \
     OMZP::direnv \
     OMZP::systemd
 
