@@ -13,7 +13,13 @@ for src in "$script_dir"/zsh/*; do
 done
 # 先启动 zsh 触发 zinit 安装，然后执行命令
 exec zsh -c '
+  # 测量加载时间
+  start_time=$(date +%s%N)
   source ~/.zshrc
-  ./pixi-setup.sh
+  end_time=$(date +%s%N)
+  elapsed=$((($end_time - $start_time) / 1000000))
+  echo "=== Shell startup time: ${elapsed}ms ==="
+
+  # ./pixi-setup.sh
   exec zsh
 '

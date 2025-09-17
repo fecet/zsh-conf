@@ -7,6 +7,10 @@ version = "0.1.0"
 
 [tasks]
 
+[tasks.ctr]
+cmd = "docker build -t zsh-conf --build-arg USER=$(whoami) dockerfiles && docker run -it --rm -v $(pwd):$(pwd) -e HOME=$HOME -w $(pwd) zsh-conf"
+description = "Build and run Docker container with mounted workspace and home directory"
+
 [dependencies]
 cue = "*"
 msgspec = "*"
