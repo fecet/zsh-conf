@@ -73,6 +73,50 @@ _fix-omz-plugin() {
     }
     rm -rf ./ohmyzsh
 }
+
+# Optimized version with shared clone cache for better performance
+_fix-omz-plugin-cached() {
+    [[ -f ./._zinit/teleid ]] || return 1
+    local teleid="$(<./._zinit/teleid)"
+    local pluginid
+    for pluginid (${teleid#OMZ::plugins/} ${teleid#OMZP::}) {
+        [[ $pluginid != $teleid ]] && break
+    }
+    (($?)) && return 1
+
+    # Use a shared cache directory for the current zinit update cycle
+    local cache_dir="${TMPDIR:-/tmp}/omz-cache-$$"
+    local omz_dir="${cache_dir}/ohmyzsh"
+
+    # Clone only if not already cached
+    if [[ ! -d "${omz_dir}/.git" ]]; then
+        print "Cloning Oh My Zsh to cache..."
+        mkdir -p "${cache_dir}"
+        git clone --quiet --no-checkout --depth=1 --filter=tree:0 \
+            https://github.com/ohmyzsh/ohmyzsh "${omz_dir}"
+    fi
+
+    print "Fixing $teleid from cache..."
+
+    # Configure sparse-checkout for this specific plugin
+    (
+        cd "${omz_dir}"
+        git sparse-checkout add /plugins/$pluginid 2>/dev/null || \
+            git sparse-checkout set --no-cone /plugins/$pluginid
+        git checkout --quiet
+    )
+
+    # Copy plugin files
+    local file
+    for file ("${omz_dir}"/plugins/$pluginid/*~(.gitignore|*.plugin.zsh)(D)) {
+        print "Copying ${file:t}..."
+        cp -R $file ./${file:t}
+    }
+
+    # Clean up cache after all plugins are processed (deferred via trap)
+    # This allows multiple plugin loads to share the same cache
+    trap "rm -rf '${cache_dir}' 2>/dev/null" EXIT
+}
 # == zsh-zsh-autosuggestions
 ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
@@ -121,7 +165,6 @@ zinit ice as"program" \
 zinit wait="0" lucid light-mode for \
     hlissner/zsh-autopair \
     Aloxaf/gencomp \
-    atuinsh/atuin \
     OMZL::completion.zsh \
     OMZL::clipboard.zsh \
     has'fzf' OMZP::fzf \
@@ -133,15 +176,15 @@ zinit wait="0" lucid light-mode for \
 
 zinit wait="1" lucid for \
   atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
-  atclone"_fix-omz-plugin" OMZP::extract \
-  atclone"_fix-omz-plugin" OMZP::pip \
-  atclone"_fix-omz-plugin" OMZP::kubectl \
-  atclone"_fix-omz-plugin" OMZP::podman \
-  atclone"_fix-omz-plugin" OMZP::kitty \
-  atclone"_fix-omz-plugin" OMZP::sudo \
-  atclone"_fix-omz-plugin" OMZP::dotenv \
-  atclone"_fix-omz-plugin" OMZP::direnv \
-  atclone"_fix-omz-plugin" OMZP::systemd
+  atclone"_fix-omz-plugin-cached" atpull"%atclone" OMZP::extract \
+  atclone"_fix-omz-plugin-cached" atpull"%atclone" OMZP::pip \
+  atclone"_fix-omz-plugin-cached" atpull"%atclone" OMZP::kubectl \
+  atclone"_fix-omz-plugin-cached" atpull"%atclone" OMZP::podman \
+  atclone"_fix-omz-plugin-cached" atpull"%atclone" OMZP::kitty \
+  atclone"_fix-omz-plugin-cached" atpull"%atclone" OMZP::sudo \
+  atclone"_fix-omz-plugin-cached" atpull"%atclone" OMZP::dotenv \
+  atclone"_fix-omz-plugin-cached" atpull"%atclone" OMZP::direnv \
+  atclone"_fix-omz-plugin-cached" atpull"%atclone" OMZP::systemd
 zi ice as"completion"
 zi snippet OMZP::docker/completions/_docker
 
@@ -157,6 +200,7 @@ zinit ice depth=1; zinit light romkatv/powerlevel10k
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 zinit ice depth=1; zinit light jeffreytse/zsh-vi-mode
 eval "$(zoxide init zsh)"
+eval "$(atuin init zsh)"
 fpath+=($PIXI_HOME/completions/zsh)
 autoload -Uz compinit
 compinit

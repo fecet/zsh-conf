@@ -10,6 +10,7 @@ c() {
     clear "$@"
   fi
 }
+alias tf=terraform
 alias j=just
 alias f=fzf
 alias s=neofetch
