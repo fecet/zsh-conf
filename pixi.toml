@@ -12,7 +12,6 @@ cmd = "docker build -t zsh-conf --build-arg USER=$(whoami) dockerfiles && docker
 description = "Build container and run install.sh inside it"
 
 [dependencies]
-cue = "*"
 msgspec = "*"
 msgspec-yaml = "*"
 msgspec-toml = "*"

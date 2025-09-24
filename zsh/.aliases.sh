@@ -167,12 +167,12 @@ function sshtunnel() {
   # ssh -L \*:"$1":localhost:$1 -N -T $2
   ssh -L "${1}":localhost:"${2}" -N -T "${3}"
 }
-function sync-from() {
-  rsync -avP "$1:$2" $2 "${3}"
+function sync-from() { # rsync: remote -> local, same path both sides
+  rsync -avP "${@:3}" -- "${1}:${2}" "$2"
 }
 
-function sync-to() {
-  rsync -avP $2 "$1:$2" "${3}"
+function sync-to() { # rsync: local -> remote, same path both sides
+  rsync -avP "${@:3}" -- "$2" "${1}:${2}"
 }
 # unzip -P "$(echo -n 中文密码|iconv -f utf-8 -t gbk)"  文件名.zip
 # wget google.com && rm index.html
@@ -249,6 +249,10 @@ alias kns="kubens"
 alias krrd="kubectl rollout restart deployment"
 alias krrss="kubectl rollout restart statefulset"
 alias krr="kubectl rollout restart"
+alias kdel="kubectl delete" 
+alias ke="kubectl edit"
+alias kg="kubectl get"
+
 if [ "$(command -v pixi)" ]; then
   pxe() {
     # pixi shell-hook -e $(pixi info --json | jq -r '.environments_info[].name' | fzf) | source /dev/stdin
