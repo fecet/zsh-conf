@@ -6,8 +6,10 @@ pixi config set --global default-channels
 pixi config append --global default-channels "https://repo.prefix.dev/meta-forge"
 pixi config append --global default-channels "conda-forge"
 pixi config set --global repodata-config.disable-sharded true
-pixi run pixi-global.py shell
+# pixi run pixi-global.py shell
 export DBUS_SESSION_BUS_ADDRESS=""
+pixi global sync
+touch $PIXI_HOME/envs/shell/etc/pixi/global-ignore-conda-prefix
 pixi global sync
 mkdir -p "$PIXI_HOME/completions/zsh"
 typeset -A comps

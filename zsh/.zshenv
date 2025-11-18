@@ -20,7 +20,7 @@ export XDG_CONFIG_HOME=$HOME/.config
 export PIXI_HOME="$HOME/.pixi"
 export ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 export ZSH_CACHE_DIR="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit"
-export PATH="$PATH:$PIXI_HOME/bin"
+export PATH="$PIXI_HOME/bin:$PATH"
 export PATH="$PATH:$PIXI_HOME/envs/pnpm/bin"
 export PATH="$PATH:${KREW_ROOT:-$HOME/.krew}/bin:"
 if [ -n "$JUPYTER_SERVER_URL" ]; then
@@ -50,4 +50,3 @@ elif [ "$CHROME_DESKTOP" = "cursor.desktop" ]; then
 fi
 export EDITOR=$VISUAL
 export MANPAGER='nvim +Man!'
-export FZF_DEFAULT_OPTS="--height 90% --layout=reverse --preview='pistol {}' --preview-window=right,border-none"

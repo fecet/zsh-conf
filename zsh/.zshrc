@@ -166,6 +166,12 @@ zinit ice depth=1 as"program" \
   atpull'%atclone' \
   sbin'kubectx;kubens'; zinit load ahmetb/kubectx
 
+# zinit ice depth=1 as"program" from"gh-r" \
+#   atpull"%atclone" \
+#   bpick'*openssl*' \
+#   mv'bob*/bob -> bob' \
+#   pick'bob'; zinit load MordechaiHadad/bob
+
 # Core plugins - load immediately after prompt
 zinit wait lucid light-mode for \
     hlissner/zsh-autopair \
@@ -202,6 +208,11 @@ zinit wait lucid for \
     zdharma-continuum/fast-syntax-highlighting \
   atload"!_zsh_autosuggest_start" \
     zsh-users/zsh-autosuggestions
+
+zinit wait lucid for \
+  pick"themes/*${FZF_CATPPUCCIN_FLAVOR:-macchiato}*.sh" \
+  atload"FZF_DEFAULT_OPTS+=\" --height=90% --layout=reverse --preview='pistol {}' --preview-window=right,border-none --color=bg:-1,preview-bg:-1,fg+:#C6A0F6,hl+:#ED8796\"" \
+  catppuccin/fzf
 
 zinit ice depth=1; zinit light romkatv/powerlevel10k
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
