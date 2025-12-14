@@ -147,7 +147,7 @@ zstyle ":completion:*:git-checkout:*" sort false
 zstyle ':completion:*' file-sort modification
 zstyle ':completion:*:exa' sort false
 zstyle ':completion:files' sort false
-zstyle ':fzf-tab:complete:*' fzf-preview 'echo $realpath | ~/scripts/fzf_preview.py'
+zstyle ':fzf-tab:complete:*' fzf-preview 'pistol $realpath'
 
 zinit ice depth=1 as"program" from"gh-r" \
   atpull"%atclone" \
@@ -199,10 +199,6 @@ zinit wait"1" lucid for \
 
 zinit ice as"completion"
 zinit snippet OMZP::docker/completions/_docker
-
-# Optional enhancements - load last
-zinit wait"2" lucid for \
-    Freed-Wu/fzf-tab-source
 
 # Syntax highlighting and autosuggestions
 zinit wait lucid for \
