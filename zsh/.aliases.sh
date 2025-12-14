@@ -252,6 +252,15 @@ alias krr="kubectl rollout restart"
 alias kdel="kubectl delete" 
 alias ke="kubectl edit"
 alias kg="kubectl get"
+alias kgkm="kubectl get kustomizations.kustomize.toolkit.fluxcd.io -n flux-system"
+alias kdkm="kubectl describe kustomizations.kustomize.toolkit.fluxcd.io -n flux-system"
+alias kdelkm="kubectl delete kustomization -n flux-system"
+alias kekm="kubectl edit kustomization -n flux-system"
+alias kghm="kubectl get helmreleases.helm.toolkit.fluxcd.io -n flux-system"
+alias kdhm="kubectl describe helmreleases.helm.toolkit.fluxcd.io -n flux-system"
+alias kdelhm="kubectl delete helmrelease -n flux-system"
+alias kehm="kubectl edit helmrelease -n flux-system"
+
 
 if [ "$(command -v pixi)" ]; then
   pxe() {
