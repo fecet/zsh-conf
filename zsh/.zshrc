@@ -215,6 +215,7 @@ zinit ice depth=1; zinit light romkatv/powerlevel10k
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 if command -v zoxide >/dev/null 2>&1; then
   eval "$(zoxide init zsh)"
+  z() { [[ $# -eq 0 ]] && __zoxide_zi || __zoxide_z "$@"; }
 fi
 if command -v atuin >/dev/null 2>&1; then
   eval "$(atuin init zsh)"

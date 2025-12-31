@@ -25,7 +25,6 @@ alias sudop="sudo -E env PATH=\$PATH"
 
 alias update-keys="cat ~/.ssh/ssh_keys/* > ~/.ssh/authorized_keys"
 alias update-etc="sudo rsync -vrP ~/scripts/etc/ /etc/"
-alias zz=__zoxide_zi
 
 # alias det="~/.conda/envs/dl/bin/det"
 
@@ -294,3 +293,12 @@ if [ "$(command -v pixi)" ]; then
   alias pxee="pixi shell-hook | source /dev/stdin"
 fi
 alias kxx="killall xinit"
+
+killport() {
+  local port="$1"
+  if [[ -z "$port" ]]; then
+    echo "用法: killport <port>" >&2
+    return 1
+  fi
+  lsof -i :"$port" -t | xargs -r kill -9
+}
