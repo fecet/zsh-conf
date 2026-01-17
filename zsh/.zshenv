@@ -7,6 +7,7 @@ export PATH=$HOME/.cargo/bin:$PATH
 export PATH=$HOME/go/bin:$PATH
 export PATH=$HOME/.TinyTeX/bin/x86_64-linux/:$PATH
 export PATH=$HOME/.local/share/bob/nvim-bin:$PATH
+export PATH=$HOME/.bun/bin:$PATH
 export PATH=$PATH:"$HOME/.local/share/nvim/mason/bin"
 # pnpm
 export PNPM_HOME="$HOME/.local/share/pnpm"

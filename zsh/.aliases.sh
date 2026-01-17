@@ -170,8 +170,8 @@ function sync-from() { # rsync: remote -> local, same path both sides
   rsync -avP "${@:3}" -- "${1}:${2}" "$2"
 }
 
-function sync-to() { # rsync: local -> remote, same path both sides
-  rsync -avP "${@:3}" -- "$2" "${1}:${2}"
+function sync-to() { # rsync: local -> remote, same path both sides, respects .gitignore
+  rsync -avP --filter=':- .gitignore' --exclude='.git' "${@:3}" -- "$2" "${1}:${2}"
 }
 # unzip -P "$(echo -n 中文密码|iconv -f utf-8 -t gbk)"  文件名.zip
 # wget google.com && rm index.html
