@@ -13,6 +13,7 @@ c() {
 alias tf=terraform
 alias j=just
 alias f=fzf
+alias kak="kubectl apply -k"
 alias s=neofetch
 alias ss="kitty +kitten ssh"
 alias v="nvim"
