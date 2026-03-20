@@ -36,4 +36,3 @@ for name in "${(@k)comps}"; do
     echo "⚠️ 跳过补全 $name：未找到命令 '$cmd'" >&2
   fi
 done
-compinit

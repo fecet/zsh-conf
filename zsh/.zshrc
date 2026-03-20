@@ -218,6 +218,11 @@ if command -v zoxide >/dev/null 2>&1; then
   z() { [[ $# -eq 0 ]] && __zoxide_zi || __zoxide_z "$@"; }
 fi
 if command -v atuin >/dev/null 2>&1; then
+  if [[ -z "$XDG_RUNTIME_DIR" ]]; then
+    local _rundir="/run/user/$(id -u)"
+    [[ -d "$_rundir" ]] && export XDG_RUNTIME_DIR="$_rundir" || export XDG_RUNTIME_DIR=/tmp
+  fi
+  atuin daemon 2>/dev/null &!
   eval "$(atuin init zsh)"
 fi
 # Add Pixi completions to fpath
