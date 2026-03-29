@@ -10,6 +10,8 @@ c() {
     clear "$@"
   fi
 }
+# Claude Code: default to skip permissions
+alias claude="claude --dangerously-skip-permissions --effort max"
 alias tf=terraform
 alias j=just
 alias f=fzf
@@ -171,7 +173,10 @@ function sync-from() { # rsync: remote -> local, same path both sides
   rsync -avP "${@:3}" -- "${1}:${2}" "$2"
 }
 
-function sync-to() { # rsync: local -> remote, same path both sides, respects .gitignore
+function sync-to() { # rsync: local -> remote, same path both sides
+  rsync -avP "${@:3}" -- "$2" "${1}:${2}"
+}
+function sync-to-nogit() { # rsync: local -> remote, same path both sides, respects .gitignore
   rsync -avP --filter=':- .gitignore' --exclude='.git' "${@:3}" -- "$2" "${1}:${2}"
 }
 # unzip -P "$(echo -n 中文密码|iconv -f utf-8 -t gbk)"  文件名.zip
@@ -249,7 +254,137 @@ alias kns="kubens"
 alias krrd="kubectl rollout restart deployment"
 alias krrss="kubectl rollout restart statefulset"
 alias krr="kubectl rollout restart"
-alias kdel="kubectl delete" 
+
+_kdel() {
+  emulate -L zsh
+
+  if (( $# == 0 )); then
+    kubectl delete
+    return
+  fi
+
+  if [[ "$1" == -* ]]; then
+    kubectl delete "$@"
+    return
+  fi
+
+  local resource="$1"
+  shift
+
+  local -a flags targets matches resource_names
+  local resource_names_output
+
+  if ! resource_names_output="$(kubectl get "$resource" -o custom-columns=:metadata.name --no-headers 2>/dev/null)"; then
+    kubectl delete "$resource" "$@"
+    return
+  fi
+
+  resource_names=("${(@f)resource_names_output}")
+
+  local arg
+  for arg in "$@"; do
+    if [[ "$arg" == -* ]]; then
+      flags+=("$arg")
+      continue
+    fi
+
+    if [[ "$arg" == *[\*\?\[]* ]]; then
+      matches=("${(@)${(M)resource_names:#${~arg}}}")
+      if (( ${#matches} == 0 )); then
+        print -u2 "kdel: no ${resource} items matched pattern: $arg"
+        return 1
+      fi
+      targets+=("${matches[@]}")
+    else
+      targets+=("$arg")
+    fi
+  done
+
+  typeset -U targets
+
+  if (( ${#targets} == 0 )); then
+    kubectl delete "$resource" "${flags[@]}"
+    return
+  fi
+
+  kubectl delete "$resource" "${targets[@]}" "${flags[@]}"
+}
+
+_kdel_resource_matches() {
+  emulate -L zsh
+
+  local resource="$1"
+  local pattern="$2"
+  local resource_names_output
+  local -a resource_names
+
+  if ! resource_names_output="$(kubectl get "$resource" -o custom-columns=:metadata.name --no-headers 2>/dev/null)"; then
+    return 1
+  fi
+
+  resource_names=("${(@f)resource_names_output}")
+  if [[ -n $pattern ]]; then
+    reply=("${(@M)resource_names:#${~pattern}}")
+  else
+    reply=("${resource_names[@]}")
+  fi
+}
+
+_kdx_expand_or_complete_widget() {
+  emulate -L zsh
+
+  if [[ -n $RBUFFER ]]; then
+    zle expand-or-complete
+    return
+  fi
+
+  local -a line_words head matches
+  local resource pattern
+
+  line_words=(${(z)LBUFFER})
+  if (( ${#line_words} < 3 )); then
+    zle expand-or-complete
+    return
+  fi
+
+  if [[ ${line_words[1]} != kdx ]]; then
+    zle expand-or-complete
+    return
+  fi
+
+  resource="${line_words[2]}"
+  pattern="${line_words[-1]}"
+  if [[ $pattern != *[\*\?\[]* ]]; then
+    zle expand-or-complete
+    return
+  fi
+
+  _kdel_resource_matches "$resource" "$pattern" || {
+    zle expand-or-complete
+    return
+  }
+  matches=("${reply[@]}")
+  (( ${#matches} > 0 )) || {
+    zle expand-or-complete
+    return
+  }
+
+  head=("${line_words[@]:0:${#line_words}-1}")
+  if (( ${#head} > 0 )); then
+    LBUFFER="${(j: :)head} ${(j: :)matches} "
+  else
+    LBUFFER="${(j: :)matches} "
+  fi
+  zle redisplay
+}
+
+_install_kdx() {
+  unalias kdx 2>/dev/null
+  function kdx() {
+    _kdel "$@"
+  }
+}
+
 alias ke="kubectl edit"
 alias kg="kubectl get"
 alias kgkm="kubectl get kustomizations.kustomize.toolkit.fluxcd.io -n flux-system"
@@ -260,7 +395,6 @@ alias kghm="kubectl get helmreleases.helm.toolkit.fluxcd.io -n flux-system"
 alias kdhm="kubectl describe helmreleases.helm.toolkit.fluxcd.io -n flux-system"
 alias kdelhm="kubectl delete helmrelease -n flux-system"
 alias kehm="kubectl edit helmrelease -n flux-system"
-
 
 if [ "$(command -v pixi)" ]; then
   pxe() {

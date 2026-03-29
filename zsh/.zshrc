@@ -14,6 +14,7 @@ setopt INC_APPEND_HISTORY        # Write to the history file immediately, not wh
 setopt HIST_IGNORE_ALL_DUPS      # Delete old recorded entry if new entry is a duplicate.
 setopt HIST_FIND_NO_DUPS         # Do not display a line previously found.
 setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history file.
+setopt nonomatch                  # Keep unmatched globs literal so kdel pod foo* can pass patterns through.
 ZVM_LINE_INIT_MODE=$ZVM_MODE_NORMAL
 ZVM_INSERT_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BEAM
 ZVM_NORMAL_MODE_CURSOR=$ZVM_CURSOR_BLINKING_BLOCK
@@ -188,6 +189,7 @@ zinit wait"2" lucid for jeffreytse/zsh-vi-mode
 zinit wait"1" lucid for \
   atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
   atclone"_fix-omz-plugin-cached" atpull"%atclone" \
+  atload'_install_kdx; (( $+functions[compdef] )) && compdef kdx=kubectl' \
     OMZP::extract \
     OMZP::pip \
     OMZP::kubectl \
@@ -196,6 +198,12 @@ zinit wait"1" lucid for \
     OMZP::sudo \
     OMZP::direnv \
     OMZP::systemd
+
+_install_kdx
+zle -N _kdx_expand_or_complete_widget
+bindkey '^I' _kdx_expand_or_complete_widget
+bindkey -M emacs '^I' _kdx_expand_or_complete_widget
+bindkey -M viins '^I' _kdx_expand_or_complete_widget
 
 zinit ice as"completion"
 zinit snippet OMZP::docker/completions/_docker
@@ -227,3 +235,4 @@ if command -v atuin >/dev/null 2>&1; then
 fi
 # Add Pixi completions to fpath
 fpath+=($PIXI_HOME/completions/zsh)
+
