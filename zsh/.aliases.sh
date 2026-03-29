@@ -330,7 +330,7 @@ _kdel_resource_matches() {
   fi
 }
 
-_kdx_expand_or_complete_widget() {
+_kdel_expand_or_complete_widget() {
   emulate -L zsh
 
   if [[ -n $RBUFFER ]]; then
@@ -347,7 +347,7 @@ _kdx_expand_or_complete_widget() {
     return
   fi
 
-  if [[ ${line_words[1]} != kdx ]]; then
+  if [[ ${line_words[1]} != kdel ]]; then
     zle expand-or-complete
     return
   fi
@@ -378,9 +378,9 @@ _kdx_expand_or_complete_widget() {
   zle redisplay
 }
 
-_install_kdx() {
-  unalias kdx 2>/dev/null
-  function kdx() {
+_install_kdel() {
+  unalias kdel 2>/dev/null
+  function kdel() {
     _kdel "$@"
   }
 }

@@ -189,7 +189,7 @@ zinit wait"2" lucid for jeffreytse/zsh-vi-mode
 zinit wait"1" lucid for \
   atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
   atclone"_fix-omz-plugin-cached" atpull"%atclone" \
-  atload'_install_kdx; (( $+functions[compdef] )) && compdef kdx=kubectl' \
+  atload'_install_kdel; (( $+functions[compdef] )) && compdef kdel=kubectl' \
     OMZP::extract \
     OMZP::pip \
     OMZP::kubectl \
@@ -199,11 +199,11 @@ zinit wait"1" lucid for \
     OMZP::direnv \
     OMZP::systemd
 
-_install_kdx
-zle -N _kdx_expand_or_complete_widget
-bindkey '^I' _kdx_expand_or_complete_widget
-bindkey -M emacs '^I' _kdx_expand_or_complete_widget
-bindkey -M viins '^I' _kdx_expand_or_complete_widget
+_install_kdel
+zle -N _kdel_expand_or_complete_widget
+bindkey '^I' _kdel_expand_or_complete_widget
+bindkey -M emacs '^I' _kdel_expand_or_complete_widget
+bindkey -M viins '^I' _kdel_expand_or_complete_widget
 
 zinit ice as"completion"
 zinit snippet OMZP::docker/completions/_docker
