@@ -1,16 +1,25 @@
 #!/usr/bin/env zsh
 
+script_dir=${0:A:h}
+manifest_dir="$PIXI_HOME/manifests"
+manifest_path="$manifest_dir/pixi-global.toml"
+
 pixi config set --global detached-environments $PIXI_HOME/envs
 pixi config set --global pinning-strategy no-pin
 pixi config set --global default-channels
 pixi config append --global default-channels "https://repo.prefix.dev/meta-forge"
 pixi config append --global default-channels "conda-forge"
 pixi config set --global repodata-config.disable-sharded true
-# pixi run pixi-global.py shell
+mkdir -p "$manifest_dir"
+ln -sfn -- "$script_dir/pixi-global.toml" "$manifest_path"
 export DBUS_SESSION_BUS_ADDRESS=""
+marker_path="$PIXI_HOME/envs/shell/etc/pixi/global-ignore-conda-prefix"
 pixi global sync
-touch $PIXI_HOME/envs/shell/etc/pixi/global-ignore-conda-prefix
-pixi global sync
+if [[ ! -e "$marker_path" ]]; then
+  mkdir -p "${marker_path:h}"
+  touch "$marker_path"
+  pixi global sync
+fi
 mkdir -p "$PIXI_HOME/completions/zsh"
 typeset -A comps
 comps=(

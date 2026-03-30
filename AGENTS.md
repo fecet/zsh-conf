@@ -4,22 +4,22 @@
 This repo manages ZSH dotfiles through symlinks. Key items:
 - `install.sh` links everything in `zsh/` into the home directory.
 - `zsh/` holds user-facing configs (`.zshrc`, `.zshenv`, `.aliases.sh`, `.p10k.zsh`).
-- `scripts/` contains helper utilities such as `pixi-global.py` for Pixi manifest generation.
-- `pixi.toml` declares the reproducible toolchain used to run Python helpers and CLI utilities.
+- `pixi-global.toml` is the tracked Pixi global manifest; `pixi-setup.sh` links it into `$PIXI_HOME/manifests/` and syncs it.
+- `pixi.toml` keeps local development tasks for this repo.
 Keep personal secrets or host-specific overrides outside the tracked tree.
 
 ## Build, Test, and Development Commands
-- `./install.sh` — recreate symlinks; run after editing any file in `zsh/`.
-- `pixi shell` — spawn the managed environment with all declared CLI tools.
-- `pixi run python scripts/pixi-global.py shell` — rebuild the default Pixi manifest; swap `shell` for `devops` or `all` as needed.
-- `bash -n install.sh` — quick syntax check before committing shell changes.
+- `./install.sh` — recreate symlinks, relink `pixi-global.toml`, and run Pixi setup.
+- `pixi shell` — spawn the repo's local Pixi environment for development tasks.
+- `bash -n install.sh && zsh -n pixi-setup.sh` — quick syntax check before committing shell changes.
+- `HOME=$(mktemp -d) INSTALL_SH_SKIP_SHELL=1 ./install.sh` — smoke test symlink setup in a disposable home.
 Always verify new aliases or functions in a fresh shell session (`exec -l $SHELL`).
 
 ## Coding Style & Naming Conventions
 Shell scripts target Bash with `set -e`; prefer lowercase, hyphenated filenames and snake_case function names. Indent with two spaces inside loops and conditionals, mirroring `install.sh`. Python utilities follow PEP 8: four-space indentation, type hints, and dataclasses where state is grouped. Keep comments concise and in English.
 
 ## Testing Guidelines
-No formal test harness exists. Validate shell edits via `bash -n` plus manual execution. For Python, run `pixi run python scripts/pixi-global.py --help` and generate a manifest into a temp path to ensure serialization succeeds. When changing symlink logic, test against a disposable directory using `HOME=$(mktemp -d) ./install.sh`.
+No formal test harness exists. Validate shell edits via `bash -n`, `zsh -n pixi-setup.sh`, plus manual execution. When changing symlink logic, test against a disposable directory using `HOME=$(mktemp -d) INSTALL_SH_SKIP_SHELL=1 ./install.sh`.
 
 ## Commit & Pull Request Guidelines
 Git history favors focused commits with conventional prefixes such as `feat(scope):`, `docs:`, or `pixi-global:`. Use imperative mood and keep the subject under ~70 characters. For pull requests, include: purpose, affected components (e.g., `zsh/.zshrc`), manual verification notes, and any follow-up tasks. Link issues when available and attach terminal snippets if behavior changed.

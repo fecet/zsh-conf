@@ -11,8 +11,3 @@ version = "0.1.0"
 cmd = "docker build -t zsh-conf --build-arg USER=$(whoami) dockerfiles && docker run --rm -it -v $(pwd):$(pwd) -e HOME=$HOME -e INSTALL_SH_SKIP_SHELL=1 -w $(pwd) zsh-conf"
 description = "Build container and run install.sh inside it"
 
-[dependencies]
-msgspec = "*"
-msgspec-yaml = "*"
-msgspec-toml = "*"
-tyro = "*"

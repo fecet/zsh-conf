@@ -1,0 +1,250 @@
+version = 1
+
+[envs.yazi]
+channels = ["https://prefix.dev/github-releases"]
+dependencies = { yazi = "*" }
+exposed = { ya = "ya", yazi = "yazi" }
+
+
+[envs.duf]
+channels = ["conda-forge"]
+dependencies = { duf = "*" }
+exposed = { duf = "duf" }
+
+[envs.just]
+channels = ["conda-forge"]
+dependencies = { just = "*" }
+exposed = { just = "just" }
+
+[envs.atuin]
+channels = ["conda-forge"]
+dependencies = { atuin = "*" }
+exposed = { atuin = "atuin" }
+
+[envs.eza]
+channels = ["conda-forge"]
+dependencies = { eza = "*" }
+exposed = { eza = "eza" }
+
+[envs.bat]
+channels = ["conda-forge"]
+dependencies = { bat = "*" }
+exposed = { bat = "bat" }
+
+[envs.fastfetch]
+channels = ["conda-forge"]
+dependencies = { fastfetch = "*" }
+exposed = { fastfetch = "fastfetch", flashfetch = "flashfetch" }
+
+[envs.jq]
+channels = ["conda-forge"]
+dependencies = { jq = "*" }
+exposed = { jq = "jq" }
+
+[envs.ncdu]
+channels = ["conda-forge"]
+dependencies = { ncdu = "*" }
+exposed = { ncdu = "ncdu" }
+
+[envs.pv]
+channels = ["conda-forge"]
+dependencies = { pv = "*" }
+exposed = { pv = "pv" }
+
+[envs.ripgrep]
+channels = ["conda-forge"]
+dependencies = { ripgrep = "*" }
+exposed = { rg = "rg" }
+
+[envs.p7zip]
+channels = ["conda-forge"]
+dependencies = { p7zip = "*" }
+exposed = { 7z = "7z", 7za = "7za", 7zr = "7zr" }
+
+[envs.minio-client]
+channels = ["conda-forge"]
+dependencies = { minio-client = "*" }
+exposed = { mc = "mc" }
+
+[envs.direnv]
+channels = ["conda-forge"]
+dependencies = { direnv = "*" }
+exposed = { direnv = "direnv" }
+
+[envs.tmux]
+channels = ["https://prefix.dev/meta-forge", "conda-forge"]
+dependencies = { tmux = "=3.5", kitty-terminfo = "*" }
+exposed = { tmux = "tmux" }
+
+[envs.pre-commit]
+channels = ["conda-forge"]
+dependencies = { pre-commit = "*" }
+exposed = { pre-commit = "pre-commit" }
+
+[envs.btop]
+channels = ["conda-forge"]
+dependencies = { btop = "*" }
+exposed = { btop = "btop" }
+
+[envs.git-delta]
+channels = ["conda-forge"]
+dependencies = { git-delta = "*" }
+exposed = { delta = "delta" }
+
+[envs.gh]
+channels = ["conda-forge"]
+dependencies = { gh = "*" }
+exposed = { gh = "gh" }
+
+[envs.pyinfra]
+channels = ["conda-forge"]
+dependencies = { pyinfra = "*", python = "3.10.*" }
+exposed = { pyinfra = "pyinfra" }
+
+[envs.pipreqs]
+channels = ["conda-forge"]
+dependencies = { pipreqs = "*" }
+exposed = { pipreqs = "pipreqs" }
+
+[envs.cookiecutter]
+channels = ["conda-forge"]
+dependencies = { cookiecutter = "*" }
+exposed = { cookiecutter = "cookiecutter" }
+
+[envs.uv]
+channels = ["conda-forge"]
+dependencies = { uv = "*" }
+exposed = { uv = "uv", uvx = "uvx" }
+
+[envs.micromamba]
+channels = ["conda-forge"]
+dependencies = { micromamba = "*" }
+exposed = { micromamba = "micromamba" }
+
+[envs.pnpm]
+channels = ["conda-forge"]
+dependencies = { pnpm = "*", nodejs = "22.*" }
+exposed = { pnpm = "pnpm", pnpx = "pnpx", corepack = "corepack", node = "node", npm = "npm", npx = "npx" }
+
+[envs.lazygit]
+channels = ["conda-forge"]
+dependencies = { lazygit = "*" }
+exposed = { lazygit = "lazygit" }
+
+[envs.zoxide]
+channels = ["conda-forge"]
+dependencies = { zoxide = "*" }
+exposed = { zoxide = "zoxide" }
+
+[envs.fzf]
+channels = ["conda-forge"]
+dependencies = { fzf = "*" }
+exposed = { fzf = "fzf" }
+
+[envs.mutagen-io]
+channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
+dependencies = { mutagen-io = "*" }
+exposed = { mutagen = "mutagen" }
+
+[envs.bob]
+channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
+dependencies = { bob = "*" }
+exposed = { bob = "bob" }
+
+[envs.ast-grep]
+channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
+dependencies = { ast-grep = "*" }
+exposed = { ast-grep = "ast-grep", sg = "sg" }
+
+[envs.kubernetes]
+channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
+dependencies = { kubernetes = "*", kubectl-krew = "*", kubernetes-helm = "*" }
+exposed = { kubectl = "kubectl", helm = "helm" }
+
+[envs.go-yq]
+channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
+dependencies = { go-yq = "*" }
+exposed = { yq = "yq" }
+
+[envs.shell]
+channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
+dependencies = { kitty-terminfo = "*" }
+
+[envs.strace]
+channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
+dependencies = { strace = "*" }
+exposed = { strace = "strace", strace-log-merge = "strace-log-merge" }
+
+[envs.perf]
+channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
+dependencies = { perf = "*" }
+exposed = { pyperf = "pyperf" }
+
+[envs.pistol]
+channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
+dependencies = { pistol = "*" }
+exposed = { pistol = "pistol" }
+
+[envs.plyvel]
+channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
+dependencies = { plyvel = "*" }
+
+[envs.jujutsu]
+channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
+dependencies = { jujutsu = "*" }
+exposed = { jj = "jj" }
+
+[envs.quarto]
+channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
+dependencies = { quarto = "*" }
+exposed = { quarto = "quarto", "quarto.js" = "quarto.js" }
+
+[envs.ghc]
+channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
+dependencies = { ghc = "*" }
+exposed = { ghc = "ghc", "ghc-8.10.7" = "ghc-8.10.7", ghc-pkg = "ghc-pkg", "ghc-pkg-8.10.7" = "ghc-pkg-8.10.7", ghci = "ghci", "ghci-8.10.7" = "ghci-8.10.7", hp2ps = "hp2ps", hpc = "hpc", hsc2hs = "hsc2hs", runghc = "runghc", "runghc-8.10.7" = "runghc-8.10.7", runhaskell = "runhaskell" }
+
+[envs.tokei]
+channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
+dependencies = { tokei = "*" }
+exposed = { tokei = "tokei" }
+
+[envs.copier]
+channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
+dependencies = { copier = "*", jinja2-time = "*" }
+exposed = { copier = "copier" }
+
+[envs.git-filter-repo]
+channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
+dependencies = { git-filter-repo = "*" }
+exposed = { git-filter-repo = "git-filter-repo" }
+
+[envs.pixi-pack]
+channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
+dependencies = { pixi-pack = "*" }
+exposed = { pixi-pack = "pixi-pack" }
+
+[envs.spec-kit]
+channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
+dependencies = { spec-kit = "*" }
+exposed = { specify = "specify" }
+
+[envs.zstd]
+channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
+dependencies = { zstd = "*" }
+exposed = { unzstd = "unzstd", zstd = "zstd", zstdcat = "zstdcat", zstdgrep = "zstdgrep", zstdless = "zstdless", zstdmt = "zstdmt" }
+
+[envs.pytest]
+channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
+dependencies = { pytest = "*" }
+exposed = { pytest = "pytest", "py.test" = "py.test" }
+
+[envs.unison]
+channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
+dependencies = { unison = "*" }
+exposed = { unison = "unison" }
+
+[envs.nbpreview]
+channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
+dependencies = { nbpreview = "*" }
+exposed = { nbp = "nbp", nbpreview = "nbpreview" }
