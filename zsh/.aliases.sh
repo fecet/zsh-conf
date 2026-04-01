@@ -12,14 +12,15 @@ c() {
 }
 # Claude Code: default to skip permissions
 _CLAUDE_FLAGS=(--dangerously-skip-permissions --effort max)
-alias claude="claude ${_CLAUDE_FLAGS[*]}"
-claudex() {
+alias ccode="claude ${_CLAUDE_FLAGS[*]}"
+ccdex() {
   # ANTHROPIC_CUSTOM_HEADERS="X-Claude-Model-To-OpenAI: true\nX-Difrost-Session-ID: $(uuidgen)" \
   ANTHROPIC_CUSTOM_HEADERS=$'X-Claude-Model-To-OpenAI: true\nX-Difrost-Session-ID: '"$(uuidgen)" \
-  ANTHROPIC_BASE_URL=http://192.168.4.33:8080/runtime \
+  ANTHROPIC_BASE_URL=http://localhost:8080/runtime \
   ANTHROPIC_AUTH_TOKEN=difrost-local-test-token \
   command claude "${_CLAUDE_FLAGS[@]}" "$@"
 }
+alias codex="codex --dangerously-bypass-approvals-and-sandbox"
 alias tf=terraform
 alias j=just
 alias f=fzf
