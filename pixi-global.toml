@@ -248,3 +248,8 @@ exposed = { unison = "unison" }
 channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
 dependencies = { nbpreview = "*" }
 exposed = { nbp = "nbp", nbpreview = "nbpreview" }
+
+[envs.nacre]
+channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
+dependencies = { nacre = { git = "https://github.com/distsystem/nacre" } }
+exposed = { nacre = "nacre" }
