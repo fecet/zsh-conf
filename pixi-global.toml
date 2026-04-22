@@ -249,7 +249,12 @@ channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
 dependencies = { nbpreview = "*" }
 exposed = { nbp = "nbp", nbpreview = "nbpreview" }
 
+[envs.kaggle]
+channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
+dependencies = { kaggle = "*" }
+exposed = { kaggle = "kaggle" }
+
 [envs.nacre]
 channels = ["https://repo.prefix.dev/meta-forge", "conda-forge"]
-dependencies = { nacre = { git = "https://github.com/distsystem/nacre" } }
+dependencies = { nacre = { path = "../../../distsystem/nacre" } }
 exposed = { nacre = "nacre" }

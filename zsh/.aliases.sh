@@ -11,16 +11,19 @@ c() {
   fi
 }
 # Claude Code: default to skip permissions
-_CLAUDE_FLAGS=(--dangerously-skip-permissions --effort max)
+_CLAUDE_FLAGS=(--dangerously-skip-permissions --effort xhigh)
 alias ccode="claude ${_CLAUDE_FLAGS[*]}"
+alias claude="claude ${_CLAUDE_FLAGS[*]}"
 ccdex() {
-  # ANTHROPIC_CUSTOM_HEADERS="X-Claude-Model-To-OpenAI: true\nX-Difrost-Session-ID: $(uuidgen)" \
-  ANTHROPIC_CUSTOM_HEADERS=$'X-Claude-Model-To-OpenAI: true\nX-Difrost-Session-ID: '"$(uuidgen)" \
+  ANTHROPIC_CUSTOM_HEADERS="X-Claude-Model-To-OpenAI: true" \
   ANTHROPIC_BASE_URL=http://localhost:8080/runtime \
   ANTHROPIC_AUTH_TOKEN=difrost-local-test-token \
   command claude "${_CLAUDE_FLAGS[@]}" "$@"
 }
-alias codex="codex --dangerously-bypass-approvals-and-sandbox"
+codex() {
+  local trust="projects={$(printf '%s' "$PWD" | jq -Rs .)={trust_level=\"trusted\"}}"
+  command codex --dangerously-bypass-approvals-and-sandbox -c "$trust" "$@"
+}
 alias tf=terraform
 alias j=just
 alias f=fzf
@@ -263,6 +266,7 @@ alias kns="kubens"
 alias krrd="kubectl rollout restart deployment"
 alias krrss="kubectl rollout restart statefulset"
 alias krr="kubectl rollout restart"
+alias kvpnr="kubevpn disconnect && kubevpn connect"
 
 _kdel() {
   emulate -L zsh
