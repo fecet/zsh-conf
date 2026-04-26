@@ -54,6 +54,9 @@ source "${ZINIT_HOME}/zinit.zsh"
 export ZINIT[OPTIMIZE_OUT_DISK_ACCESSES]=1
 zstyle ':zinit:compinit' arguments -C
 
+zinit ice lucid nocompile
+zinit light "$HOME/.local/share/zsh-conf/plugins/codex-remote"
+
 # Workaround for zinit issue#504: remove subversion dependency. Function clones all files in plugin
 # directory (on github) that might be useful to zinit snippet directory. Should only be invoked
 # via zinit atclone"_fix-omz-plugin"
@@ -235,4 +238,3 @@ if command -v atuin >/dev/null 2>&1; then
 fi
 # Add Pixi completions to fpath
 fpath+=($PIXI_HOME/completions/zsh)
-

@@ -20,10 +20,7 @@ ccdex() {
   ANTHROPIC_AUTH_TOKEN=difrost-local-test-token \
   command claude "${_CLAUDE_FLAGS[@]}" "$@"
 }
-codex() {
-  local trust="projects={$(printf '%s' "$PWD" | jq -Rs .)={trust_level=\"trusted\"}}"
-  command codex --dangerously-bypass-approvals-and-sandbox -c "$trust" "$@"
-}
+
 alias tf=terraform
 alias j=just
 alias f=fzf
