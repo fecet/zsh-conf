@@ -28,6 +28,17 @@ install_local_plugins() {
   link_path "$zsh_dir/plugins" "$data_dir/plugins"
 }
 
+link_pixi() {
+  local zinit_pixi="$HOME/.local/share/zinit/plugins/fecet---pixi/pixi"
+  if [[ ! -x "$zinit_pixi" ]]; then
+    printf 'warn: zinit pixi missing at %s\n' "$zinit_pixi" >&2
+    return
+  fi
+  mkdir -p "$HOME/.local/bin"
+  ln -sfn -- "$zinit_pixi" "$HOME/.local/bin/pixi"
+  printf 'Linked %s -> %s\n' "$zinit_pixi" "$HOME/.local/bin/pixi"
+}
+
 prime_shell() {
   local elapsed_file elapsed_ms
   elapsed_file="$(mktemp)"
@@ -56,6 +67,7 @@ main() {
   install_zsh_files
   install_local_plugins
   prime_shell
+  link_pixi
 
   if [[ -z "${INSTALL_SH_SKIP_SHELL:-}" ]]; then
     exec zsh
